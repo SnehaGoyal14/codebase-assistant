@@ -1,0 +1,22 @@
+[
+  { "id": 1, "question": "What is the entry point of a Flask application?" },
+  { "id": 2, "question": "How does routing work in Flask?" },
+  { "id": 3, "question": "How do you define a route with a URL parameter?" },
+  { "id": 4, "question": "What is the purpose of the application context in Flask?" },
+  { "id": 5, "question": "What is the difference between the application context and the request context?" },
+  { "id": 6, "question": "How does Flask handle HTTP request data like form inputs and JSON?" },
+  { "id": 7, "question": "How do you return a JSON response from a Flask route?" },
+  { "id": 8, "question": "What is a Blueprint and how is it used to organize routes?" },
+  { "id": 9, "question": "How does Flask manage configuration settings?" },
+  { "id": 10, "question": "How do you run Flask in debug mode and what does it enable?" },
+  { "id": 11, "question": "What is the purpose of the before_request and after_request hooks?" },
+  { "id": 12, "question": "How does Flask handle errors and custom error pages?" },
+  { "id": 13, "question": "How does session management work in Flask?" },
+  { "id": 14, "question": "What is the g object in Flask and when should it be used?" },
+  { "id": 15, "question": "How does Flask integrate with Jinja2 for template rendering?" },
+  { "id": 16, "question": "How are static files served in a Flask application?" },
+  { "id": 17, "question": "How does Flask use the WSGI standard to interface with web servers?" },
+  { "id": 18, "question": "What is the role of the Flask CLI and how do you add custom commands?" },
+  { "id": 19, "question": "How does Flask handle signals and what are they used for?" },
+  { "id": 20, "question": "How do you write and run tests for a Flask application?" }
+]
