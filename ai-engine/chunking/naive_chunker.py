@@ -1,3 +1,5 @@
+import sys
+
 def naive_chunk(text, chunk_size=400, overlap=50):
     chunks = []
     start = 0
@@ -18,7 +20,7 @@ def naive_chunk(text, chunk_size=400, overlap=50):
     return chunks
 
 
-with open("test_rag.py", "r", encoding="utf-8") as file:
+with open(sys.argv[1], "r", encoding="utf-8") as file:
     text = file.read()
 
 naive_chunk(text)
