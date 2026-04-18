@@ -21,9 +21,14 @@ def ast_chunk(filename):
     return chunks
 
 
-chunks = ast_chunk(sys.argv[1])
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python ast_chunker.py <file>")
+        sys.exit(1)
 
-for i, chunk in enumerate(chunks, start=1):
-    print(f"\nChunk {i}:")
-    print(chunk)
-    print("-" * 50)
+    chunks = ast_chunk(sys.argv[1])
+
+    for i, chunk in enumerate(chunks, start=1):
+        print(f"\nChunk {i}:")
+        print(chunk)
+        print("-" * 50)
