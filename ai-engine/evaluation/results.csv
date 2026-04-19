@@ -1,4 +1,4 @@
-id,question,answer,source_file
+id,question,answer,source_file,score,notes
 1,What is the entry point of a Flask application?,"      app = Flask(__name__)
 
     .. admonition:: About the First Parameter
@@ -6,7 +6,7 @@ id,question,answer,source_file
         The idea of the first parameter is to give Flask an idea of what
         belongs to your application.  This name is used to find resources
         on the filesystem, can be used by extensions to improve debugging
-   ",\src\flask\sansio\app.py
+   ",\src\flask\sansio\app.py,2,
 2,How does routing work in Flask?,"from flask import Flask
 
 app = Flask(__name__)
@@ -15,7 +15,7 @@ app = Flask(__name__)
 @app.route(""/"")
 def hello():
     return ""Hello World!""
-",\tests\test_apps\helloworld\hello.py
+",\tests\test_apps\helloworld\hello.py,1,Shows routing but doesn't explain mechanism
 3,How do you define a route with a URL parameter?,"ons)
 
     @setupmethod
@@ -24,7 +24,7 @@ def hello():
         rule and options. Calls :meth:`add_url_rule`, which has more
         details about the implementation.
 
-        .. ",\src\flask\sansio\scaffold.py
+        .. ",\src\flask\sansio\scaffold.py,0,Not about URL parameters
 4,What is the purpose of the application context in Flask?,"      app = Flask(__name__)
 
     .. admonition:: About the First Parameter
@@ -32,7 +32,7 @@ def hello():
         The idea of the first parameter is to give Flask an idea of what
         belongs to your application.  This name is used to find resources
         on the filesystem, can be used by extensions to improve debugging
-   ",\src\flask\sansio\app.py
+   ",\src\flask\sansio\app.py,0,Not relevant to the question
 5,What is the difference between the application context and the request context?,"s context represents. If not given,
         loaded from the request on first access.
 
@@ -41,7 +41,7 @@ def hello():
         removed in Flask 4.0.
 
     .. versionchanged:: 3.2
-        A combined app and request context is push",\src\flask\ctx.py
+        A combined app and request context is push",\src\flask\ctx.py,1,Doesn't fully explain it
 6,How does Flask handle HTTP request data like form inputs and JSON?,"from flask import jsonify
 from flask import render_template
 from flask import request
@@ -56,7 +56,7 @@ def index(js):
 
 
 @app.route(""/add"", methods=[""POST""])
-def a",\examples\javascript\js_example\views.py
+def a",\examples\javascript\js_example\views.py,1,Incomplete
 7,How do you return a JSON response from a Flask route?,"return (
             flask.Response(
                 ""Hello world"", 404, {""Content-Type"": ""text/html"", ""X-Foo"": ""Baz""}
@@ -66,13 +66,13 @@ def a",\examples\javascript\js_example\views.py
 
     @app.route(""/response_status"")
     def from_response_status():
-        retu",\tests\test_basic.py
+        retu",\tests\test_basic.py,0,Didn't answer the question
 8,What is a Blueprint and how is it used to organize routes?,"th. The path is relative to the
         blueprint's root path. Blueprint templates are disabled by
         default. Blueprint templates have a lower precedence than those
         in the app's templates folder.
     :param url_prefix: A path to prepend to all of the blueprint's URLs,
-        to make t",\src\flask\sansio\blueprints.py
+        to make t",\src\flask\sansio\blueprints.py,1,Incomplete explanation
 9,How does Flask manage configuration settings?,"nt to use.  On Linux and OS X
     use the export statement::
 
@@ -81,7 +81,7 @@ def a",\examples\javascript\js_example\views.py
     On windows use `set` instead.
 
     :param root_path: path to which files are read relative from.  When the
-                      config object is created by the applicati",\src\flask\config.py
+                      config object is created by the applicati",\src\flask\config.py,1,
 10,How do you run Flask in debug mode and what does it enable?,"
     """"""Get whether debug mode should be enabled for the app, indicated by the
     :envvar:`FLASK_DEBUG` environment variable. The default is ``False``.
@@ -90,7 +90,7 @@ def a",\examples\javascript\js_example\views.py
     return bool(val and val.lower() not in {""0"", ""false"", ""no""})
 
 
-def get_load_dotenv(default: boo",\src\flask\helpers.py
+def get_load_dotenv(default: boo",\src\flask\helpers.py,1,Doesn't explain whatt it does
 11,What is the purpose of the before_request and after_request hooks?,"end(f)
         return f
 
@@ -99,7 +99,7 @@ def get_load_dotenv(default: boo",\src\flask\helpers.py
         """"""Register a function to run after each request to this object.
 
         The function is called with the response object, and must return
-        a response object. This allows the ",\src\flask\sansio\scaffold.py
+        a response object. This allows the ",\src\flask\sansio\scaffold.py,1,Only answers half the question
 12,How does Flask handle errors and custom error pages?,"nadded:: 0.7
         """"""
         if not self._got_first_request and self.should_ignore_error is not None:
@@ -107,7 +107,7 @@ def get_load_dotenv(default: boo",\src\flask\helpers.py
 
             warnings.warn(
                 ""The 'should_ignore_error' method is deprecated and will""
-                "" be removed in Flask 3.3. Handle errors as need",\src\flask\app.py
+                "" be removed in Flask 3.3. Handle errors as need",\src\flask\app.py,0,Didn't answer the question
 13,How does session management work in Flask?,"        """"""
 
         return session.modified or (
@@ -116,7 +116,7 @@ def get_load_dotenv(default: boo",\src\flask\helpers.py
 
     def open_session(self, app: Flask, request: Request) -> SessionMixin | None:
         """"""This is called at the beginning of each request, after
-        pushing",\src\flask\sessions.py
+        pushing",\src\flask\sessions.py,1,Didn't fully explain management work
 14,What is the g object in Flask and when should it be used?,"r
 
         The idea of the first parameter is to give Flask an idea of what
@@ -124,14 +124,14 @@ def get_load_dotenv(default: boo",\src\flask\helpers.py
         on the filesystem, can be used by extensions to improve debugging
         information and a lot more.
 
-        So it's important what you prov",\src\flask\app.py
+        So it's important what you prov",\src\flask\app.py,0,Didn't answer the question
 15,How does Flask integrate with Jinja2 for template rendering?,"function to register it as a custom Jinja filter. The name
         is optional. The decorator may be used without parentheses.
 
         The :meth:`add_app_template_filter` method may be used to register a
         function later rather than decorating.
 
-        The filter is available in all template",\src\flask\sansio\blueprints.py
+        The filter is available in all template",\src\flask\sansio\blueprints.py,1,
 16,How are static files served in a Flask application?,"der`. A route is automatically registered for
         this view at :attr:`static_url_path` if :attr:`static_folder` is
         set.
@@ -143,7 +143,7 @@ def get_load_dotenv(default: boo",\src\flask\helpers.py
 
         """"""
         if not self.has_static_folder:
-    ",\src\flask\blueprints.py
+    ",\src\flask\blueprints.py,2,Correct explanation
 17,How does Flask use the WSGI standard to interface with web servers?,"s sent to the WSGI server.  By default this will
         call all the :meth:`after_request` decorated functions.
 
@@ -151,7 +151,7 @@ def get_load_dotenv(default: boo",\src\flask\helpers.py
            As of Flask 0.5 the functions registered for after request
            execution are called in reverse order of registration.
 
-        :param re",\src\flask\app.py
+        :param re",\src\flask\app.py,1,Incomplete
 18,What is the role of the Flask CLI and how do you add custom commands?,"nds for this
         #: object. The commands are available from the ``flask`` command
         #: once the application has been discovered and blueprints have
@@ -159,7 +159,7 @@ def get_load_dotenv(default: boo",\src\flask\helpers.py
         self.cli = cli.AppGroup()
 
         # Set the name of the Click group in case someone wants to add
-        ",\src\flask\app.py
+        ",\src\flask\app.py,1,Partially correct
 19,How does Flask handle signals and what are they used for?,"from __future__ import annotations
 
 from blinker import Namespace
@@ -169,8 +169,8 @@ _signals = Namespace()
 
 template_rendered = _signals.signal(""template-rendered"")
 before_render_template = _signals.signal(""before-render-template"")
-request_started = _sig",\src\flask\signals.py
+request_started = _sig",\src\flask\signals.py,2,
 20,How do you write and run tests for a Flask application?,"from flask import Flask
 
 testapp = Flask(""testapp"")
-",\tests\test_apps\cliapp\app.py
+",\tests\test_apps\cliapp\app.py,0,Comppletely wrong
