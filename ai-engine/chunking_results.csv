@@ -1,0 +1,5 @@
+method,chunk_number,chunk_text,is_complete,total_chunks
+naive,1,"from sentence_transformers import SentenceTransformer import chromadb  print(""Loading AI model..."") ",no,3
+naive,2,"tem prices"" ]  print(""Converting code to vectors..."") embeddings = model.encode(chunks).tolist()  cl",yes,3
+naive,3,"sults = col.query(query_embeddings=q_emb, n_results=1)  print(""Answer chunk:"", results['documents'][",yes,3
+ast,1,"from sentence_transformers import SentenceTransformer import chromadb  print(""Loading AI model..."") ",no,1

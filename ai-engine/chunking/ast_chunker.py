@@ -18,10 +18,17 @@ def ast_chunk(filename):
     if current_chunk:
         chunks.append("".join(current_chunk))
 
+    return chunks
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python ast_chunker.py <file>")
+        sys.exit(1)
+
+    chunks = ast_chunk(sys.argv[1])
+
     for i, chunk in enumerate(chunks, start=1):
         print(f"\nChunk {i}:")
         print(chunk)
         print("-" * 50)
-
-
-ast_chunk(sys.argv[1])
