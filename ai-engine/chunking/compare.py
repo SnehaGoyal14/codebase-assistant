@@ -3,57 +3,68 @@ from chunking.naive_chunker import naive_chunk
 from chunking.ast_chunker import ast_chunk
 
 
-def detect_mid_function_cut(chunks):
+def is_cut_chunk(chunk):
     """
-    Detect if any chunk likely cuts a function in the middle.
-    Simple heuristic: chunk contains 'def ' but does not end cleanly.
+    Simple check:
+    If a chunk contains 'def' but looks incomplete → it's cut
     """
-    for chunk in chunks:
-        if "def " in chunk and not chunk.strip().endswith(")"):
-            return True
+    chunk = chunk.strip()
+
+    if "def " not in chunk:
+        return False
+
+    # If it ends abruptly
+    if not chunk.endswith("\n") or chunk.endswith(":"):
+        return True
+
     return False
 
 
-def main():
-    if len(sys.argv) < 2:
-        print("Usage: python chunking/compare.py <python_file>")
-        return
+def compare(file_path):
+    naive_chunks = naive_chunk(file_path)
+    ast_chunks = ast_chunk(file_path)
 
-    filename = sys.argv[1]
+    naive_count = len(naive_chunks)
+    ast_count = len(ast_chunks)
 
-    # Read file
-    try:
-        with open(filename, "r", encoding="utf-8") as file:
-            text = file.read()
-    except FileNotFoundError:
-        print(f"Error: File '{filename}' not found.")
-        return
+    # Check naive chunk issues
+    naive_cut = any(is_cut_chunk(chunk) for chunk in naive_chunks)
 
-    # Run chunkers
-    naive_chunks = naive_chunk(text)
-    ast_chunks = ast_chunk(filename)
+    # 🔥 FINAL FIX: detect real functions (not strings)
+    has_function = any(
+        line.strip().startswith("def ")
+        for chunk in ast_chunks
+        for line in chunk.split("\n")
+    )
 
-    print("\n===== COMPARISON REPORT =====")
-    print(f"Naive Chunk Count: {len(naive_chunks)}")
-    print(f"AST Chunk Count: {len(ast_chunks)}")
-    print(f"Naive cut mid-function? {'YES' if detect_mid_function_cut(naive_chunks) else 'NO'}")
-
-    print("\n===== SIDE BY SIDE: CHUNK 1 =====")
-
-    if naive_chunks:
-        print("\n--- NAIVE CHUNK 1 ---")
-        print(naive_chunks[0])
+    if has_function:
+        ast_complete = not any(is_cut_chunk(chunk) for chunk in ast_chunks)
     else:
-        print("\n--- NAIVE CHUNK 1 ---")
-        print("No chunks")
+        ast_complete = True  # no real functions → nothing to break
 
-    if ast_chunks:
-        print("\n--- AST CHUNK 1 ---")
-        print(ast_chunks[0])
-    else:
-        print("\n--- AST CHUNK 1 ---")
-        print("No chunks")
+    print("\n===== COMPARISON REPORT =====\n")
+
+    print(f"Naive Chunk Count: {naive_count}")
+    print(f"AST Chunk Count: {ast_count}")
+
+    # % reduction
+    if naive_count > 0:
+        reduction = round((1 - ast_count / naive_count) * 100, 2)
+        print(f"Chunk reduction: {reduction}%")
+
+    # Clear wording
+    print(f"Naive chunking breaks functions? {'YES' if naive_cut else 'NO'}")
+    print(f"AST chunking preserves functions? {'YES' if ast_complete else 'NO'}")
+
+    # Clean comparison
+    print("\n===== CHUNK 1 COMPARISON =====")
+
+    print("\n[NAIVE CHUNK 1]")
+    print(naive_chunks[0][:300] if naive_chunks else "No chunk")
+
+    print("\n[AST CHUNK 1]")
+    print(ast_chunks[0][:300] if ast_chunks else "No chunk")
 
 
 if __name__ == "__main__":
-    main()
+    compare(sys.argv[1])
