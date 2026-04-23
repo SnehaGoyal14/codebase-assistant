@@ -52,3 +52,13 @@ def ask(req: AskRequest):
 @app.get("/")
 def root():
     return {"message": "Codebase Assistant API is running!"}
+
+from rag.guide import generate_guide
+
+class GuideRequest(BaseModel):
+    repo_id: str
+
+@app.post("/guide")
+def guide(req: GuideRequest):
+    result = generate_guide(req.repo_id, API_KEY)
+    return {"repo_id": req.repo_id, "guide": result}
