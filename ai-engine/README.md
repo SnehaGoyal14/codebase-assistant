@@ -72,23 +72,24 @@ Response: { "repo_id": "flask", "guide": "# Onboarding Guide..." }
 ---
 
 ## Project Structure
-ai-engine/
-├── chunking/
-│   ├── naive_chunker.py      # Splits code every 400 characters
-│   ├── ast_chunker.py        # Splits at function/class boundaries
-│   ├── compare.py            # Compares both chunking methods
-│   └── evaluate_chunking.py  # Generates chunking comparison data
-├── evaluation/
-│   ├── questions.json        # 20 test questions for Flask repo
-│   ├── evaluate.py           # Runs evaluation and scores answers
-│   └── results.csv           # Evaluation results with scores
-├── rag/
-│   ├── indexer.py            # Clones repo and indexes code chunks
-│   ├── retriever.py          # Searches ChromaDB by meaning
-│   ├── llm.py                # Calls GPT-4o mini to generate answers
-│   └── guide.py              # Generates onboarding guides
-├── main.py                   # FastAPI server
-└── test_rag.py               # Week 1 proof of concept
+
+    ai-engine/
+    ├── chunking/
+    │   ├── naive_chunker.py       Splits code every 400 characters
+    │   ├── ast_chunker.py         Splits at function/class boundaries
+    │   ├── compare.py             Compares both chunking methods
+    │   └── evaluate_chunking.py   Generates chunking comparison data
+    ├── evaluation/
+    │   ├── questions.json         20 test questions for Flask repo
+    │   ├── evaluate.py            Runs evaluation and scores answers
+    │   └── results.csv            Evaluation results with scores
+    ├── rag/
+    │   ├── indexer.py             Clones repo and indexes code chunks
+    │   ├── retriever.py           Searches ChromaDB by meaning
+    │   ├── llm.py                 Calls GPT-4o mini to generate answers
+    │   └── guide.py               Generates onboarding guides
+    ├── main.py                    FastAPI server
+    └── test_rag.py                Week 1 proof of concept
 ---
 
 ## Tech Stack
