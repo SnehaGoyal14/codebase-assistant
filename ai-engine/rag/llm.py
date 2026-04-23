@@ -7,19 +7,16 @@ def get_answer(question, chunks, api_key):
     
     prompt = f"""You are a code assistant helping a developer understand an unfamiliar codebase.
 
-CRITICAL INSTRUCTIONS:
-1. Answer ONLY using the code snippets provided below
-2. If the answer is not in the snippets say: "I could not find this in the provided code"
-3. Never make anything up
-4. Keep your answer clear and concise
-5. Mention which file the answer came from
+You will be given code snippets from a repository. Explain what the code does to answer the question.
+Base your answer on the code snippets provided. If the snippets show relevant code, explain it clearly.
+Only say you cannot find the answer if the snippets are completely unrelated to the question.
 
 Code snippets:
 {chunks_text}
 
 Question: {question}
 
-Answer:"""
+Answer (explain what the code shows):"""
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
