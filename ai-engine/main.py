@@ -2,9 +2,13 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import os
+import shutil
 from rag.indexer import index_repo
 from rag.llm import get_answer
+from rag.guide import generate_guide
+from rag.graph import build_graph
 import chromadb
+import git as gitmodule
 from sentence_transformers import SentenceTransformer
 
 load_dotenv()
@@ -21,6 +25,13 @@ class IndexRequest(BaseModel):
 class AskRequest(BaseModel):
     repo_id: str
     question: str
+
+class GuideRequest(BaseModel):
+    repo_id: str
+
+class GraphRequest(BaseModel):
+    repo_url: str
+    repo_id: str
 
 @app.post("/index")
 def index(req: IndexRequest):
@@ -49,16 +60,25 @@ def ask(req: AskRequest):
         "sources": sources
     }
 
-@app.get("/")
-def root():
-    return {"message": "Codebase Assistant API is running!"}
-
-from rag.guide import generate_guide
-
-class GuideRequest(BaseModel):
-    repo_id: str
-
 @app.post("/guide")
 def guide(req: GuideRequest):
     result = generate_guide(req.repo_id, API_KEY)
     return {"repo_id": req.repo_id, "guide": result}
+
+@app.post("/graph")
+def graph(req: GraphRequest):
+    local_path = f"temp_graph_{req.repo_id}"
+    try:
+        if not os.path.exists(local_path):
+            gitmodule.Repo.clone_from(req.repo_url, local_path)
+        result = build_graph(local_path)
+        return {"repo_id": req.repo_id, "graph": result}
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        if os.path.exists(local_path):
+            shutil.rmtree(local_path, ignore_errors=True)
+
+@app.get("/")
+def root():
+    return {"message": "Codebase Assistant API is running!"}
