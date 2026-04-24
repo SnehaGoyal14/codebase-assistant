@@ -115,6 +115,17 @@ This AI engine is built as part of a final year research project addressing limi
 - **Limitation 3**: CodeMap never measured onboarding time → We run a controlled user study (Paper 2)
 - **Limitation 4**: CodeMap breaks on large repos (27% accuracy) → Our retrieval approach maintains consistent accuracy regardless of repo size
 
+## Results so far
+
+| Condition | Accuracy |
+|---|---|
+| No GPT baseline (naive chunking) | 42.5% |
+| GPT-4o mini + naive chunking | 85% |
+| GPT-4o mini + AST chunking | TBD |
+
+Zero hallucinations detected with RAG grounding.
+Improvement over baseline: +42.5 percentage points.
+
 ---
 
 ## Team
