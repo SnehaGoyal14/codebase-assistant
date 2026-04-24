@@ -117,15 +117,17 @@ This AI engine is built as part of a final year research project addressing limi
 
 ## Results so far
 
-| Condition | Accuracy |
-|---|---|
-| No GPT baseline (naive chunking) | 42.5% |
-| GPT-4o mini + naive chunking | 85% |
-| GPT-4o mini + AST chunking | TBD |
+| Condition | Accuracy | Improvement |
+|---|---|---|
+| No GPT baseline (naive chunking) | 42.5% | baseline |
+| GPT-4o mini + naive chunking | 85% | +42.5% |
+| GPT-4o mini + AST chunking | 90% | +47.5% |
 
-Zero hallucinations detected with RAG grounding.
-Improvement over baseline: +42.5 percentage points.
-
+Key findings:
+- GPT-4o mini grounding gives the biggest accuracy boost (+42.5%)
+- AST chunking further improves accuracy by 5% over naive
+- Zero score 0 answers with RAG — no complete hallucinations detected
+- Cost: under $2 total for entire evaluation
 ---
 
 ## Team
