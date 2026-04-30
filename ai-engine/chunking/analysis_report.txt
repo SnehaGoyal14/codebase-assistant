@@ -1,0 +1,24 @@
+=== CHUNKING ANALYSIS REPORT ===
+
+📊 OVERALL METRICS
+Total naive chunks: 1727
+Total AST chunks: 662
+Overall chunk reduction: 61.67%
+
+📉 COMPLETENESS
+Naive incomplete chunks: 24.55%
+AST incomplete chunks: 22.21%
+
+🔍 TOP FILE DIFFERENCES
+def locate_app(     module_name: str, app_name: st → diff 3
+def stream_with_context(     generator_or_function → diff 3
+def _make_timedelta(value: timedelta | int | None) → diff 2
+def __getattr__(name: str) -> t.Any:     import wa → diff 2
+          return decorator      @setupmethod     d → diff 2
+
+💡 KEY INSIGHTS
+- Tree-sitter significantly reduces total chunks by grouping logical code blocks.
+- Naive chunking often splits functions mid-way, reducing semantic meaning.
+- AST-based chunking preserves function/class boundaries more effectively.
+- In some cases, AST produces more chunks due to correct function-level splitting.
+- This improves retrieval quality for downstream AI systems.
