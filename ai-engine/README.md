@@ -130,6 +130,18 @@ Key findings:
 - Cost: under $2 total for entire evaluation
 ---
 
+## Multi-Repo Evaluation
+
+| Repository | Chunks | Category        |
+|------------|--------|-----------------|
+| Flask      | 1724   | Web framework   |
+| Requests   | 1091   | HTTP library    |
+| Click      | 2240   | CLI library     |
+| Jinja      | 2232   | Template engine |
+| Werkzeug   | 3453   | WSGI library    |
+
+System successfully answers questions across all 5 repos.
+
 ## Team
 
 - **Sneha Goyal** — AI engine, RAG pipeline, FastAPI server
