@@ -1,0 +1,22 @@
+[
+  { "id": 1, "question": "Where is the main Flask application instance defined in this repo?" },
+  { "id": 2, "question": "Which file initializes or configures the Flask app?" },
+  { "id": 3, "question": "What is the purpose of the sansio folder in this codebase?" },
+  { "id": 4, "question": "Which module handles route registration in this project?" },
+  { "id": 5, "question": "How are routes internally registered in this codebase (not just @app.route)?" },
+  { "id": 6, "question": "Where is request dispatching implemented?" },
+  { "id": 7, "question": "How is the application context created and managed in this repo?" },
+  { "id": 8, "question": "Where in the code is request context pushed and popped?" },
+  { "id": 9, "question": "How does Flask process a request internally from WSGI entry to response?" },
+  { "id": 10, "question": "Which function acts as the main request handler in this repo?" },
+  { "id": 11, "question": "How is configuration loaded in this codebase specifically?" },
+  { "id": 12, "question": "Where is the Config class or config logic implemented?" },
+  { "id": 13, "question": "How does Flask implement session handling internally in this repo?" },
+  { "id": 14, "question": "Where are signals defined and how are they triggered?" },
+  { "id": 15, "question": "How does Flask integrate Jinja internally in this codebase?" },
+  { "id": 16, "question": "Which test files validate routing behavior?" },
+  { "id": 17, "question": "How are test clients used in this repo?" },
+  { "id": 18, "question": "What happens inside wsgi_app() in this codebase?" },
+  { "id": 19, "question": "How does error handling flow from exception to response in this repo?" },
+  { "id": 20, "question": "What is the role of scaffold.py in Flask internals?" }
+]
