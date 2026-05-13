@@ -50,7 +50,7 @@ def status(repo_id: str):
 def ask(req: AskRequest):
     col = client.get_collection(req.repo_id)
     q_emb = model.encode([req.question]).tolist()
-    results = col.query(query_embeddings=q_emb, n_results=5)
+    results = col.query(query_embeddings=q_emb, n_results=10)
     chunks = results['documents'][0]
     sources = [m['file'] for m in results['metadatas'][0]]
     answer = get_answer(req.question, chunks, API_KEY)
