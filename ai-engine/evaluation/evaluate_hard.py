@@ -9,7 +9,7 @@ with open("evaluation/questions_hard.json", "r") as f:
 # Opening CSV file to save the response
 with open("evaluation/results_hard.csv", "w", newline="", encoding="utf-8") as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerow(["id", "question", "answer", "source_file", "score", "notes"])
+    writer.writerow(["id", "question", "answer", "source_file", "score", "notes", "hallucination"])
 
     for item in questions:
         question = item["question"]
@@ -45,7 +45,14 @@ with open("evaluation/results_hard.csv", "w", newline="", encoding="utf-8") as c
         # Ask for notes
         notes = input("Notes (optional, press Enter to skip): ").strip()
 
+        # Ask for hallucination
+        while True:
+            hallucination = input("Hallucination? (yes/no): ").strip().lower()
+            if hallucination in ["yes", "no"]:
+                break
+            print("Please enter yes or no")
+
         # Saving to CSV
-        writer.writerow([q_id, question, answer, source_file, score, notes])
+        writer.writerow([q_id, question, answer, source_file, score, notes, hallucination])
 
 print("\nAll done! Results saved to evaluation/results_hard.csv")
