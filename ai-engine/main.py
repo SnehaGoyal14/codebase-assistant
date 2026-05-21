@@ -49,22 +49,12 @@ def status(repo_id: str):
 
 @app.post("/ask")
 def ask(req: AskRequest):
-    chunks, sources, low_confidence = retrieve(req.repo_id, req.question)
-
-    if low_confidence:
-        return {
-            "question": req.question,
-            "answer": "The retrieved code snippets do not contain enough relevant information to answer this question confidently. Try rephrasing or asking about a different aspect of the codebase.",
-            "sources": sources,
-            "confidence": "low"
-        }
-
+    chunks, sources = retrieve(req.repo_id, req.question)
     answer = get_answer(req.question, chunks, API_KEY)
     return {
         "question": req.question,
         "answer": answer,
-        "sources": sources,
-        "confidence": "high"
+        "sources": sources
     }
 
 @app.post("/guide")
