@@ -16,6 +16,11 @@ Important rules:
 - If asked WHAT something does, describe its exact behavior based on the code
 - Never give generic answers — always reference the actual code shown
 
+Code snippets:
+{chunks_text}
+
+Question: {question}
+
 Answer (be specific, mention exact file names and function names):"""
 
     response = client.chat.completions.create(

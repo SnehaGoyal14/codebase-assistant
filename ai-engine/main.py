@@ -7,6 +7,7 @@ from rag.indexer import index_repo
 from rag.llm import get_answer
 from rag.guide import generate_guide
 from rag.graph import build_graph
+from rag.retriever import retrieve
 import chromadb
 import git as gitmodule
 from sentence_transformers import SentenceTransformer
@@ -48,16 +49,22 @@ def status(repo_id: str):
 
 @app.post("/ask")
 def ask(req: AskRequest):
-    col = client.get_collection(req.repo_id)
-    q_emb = model.encode([req.question]).tolist()
-    results = col.query(query_embeddings=q_emb, n_results=10)
-    chunks = results['documents'][0]
-    sources = [m['file'] for m in results['metadatas'][0]]
+    chunks, sources, low_confidence = retrieve(req.repo_id, req.question)
+
+    if low_confidence:
+        return {
+            "question": req.question,
+            "answer": "The retrieved code snippets do not contain enough relevant information to answer this question confidently. Try rephrasing or asking about a different aspect of the codebase.",
+            "sources": sources,
+            "confidence": "low"
+        }
+
     answer = get_answer(req.question, chunks, API_KEY)
     return {
         "question": req.question,
         "answer": answer,
-        "sources": sources
+        "sources": sources,
+        "confidence": "high"
     }
 
 @app.post("/guide")
