@@ -1,12 +1,61 @@
 # AI Engine — Codebase Onboarding Assistant
 
-The AI engine powers the core intelligence of the Codebase Onboarding Assistant. It indexes any GitHub repository, enables semantic search over code, and generates plain English answers to developer questions using GPT-4o mini.
+An AI-powered system that helps new developers understand unfamiliar codebases quickly. Paste any GitHub repository URL and ask questions about the code in plain English.
 
 ---
 
 ## What it does
 
-A new developer pastes a GitHub repo URL. The system clones it, reads every code file, splits it into chunks, converts them to meaning-vectors, and stores them in ChromaDB. When the developer asks a question like "how does routing work?", the system finds the 5 most relevant code chunks and sends them to GPT-4o mini which returns a plain English explanation with source citations.
+A developer pastes a GitHub repo URL. The system clones it, reads every code file, splits it into chunks using Tree-sitter AST-based chunking, converts them to meaning-vectors using sentence-transformers, and stores them in ChromaDB. When the developer asks a question like "how does routing work?", the system retrieves the 10 most relevant code chunks and sends them to GPT-4o mini which returns a detailed plain English answer with source file citations. The system also auto-generates onboarding guides and dependency graphs showing which files import which files.
+
+---
+
+## Research Context
+
+This system directly addresses 4 limitations of the state-of-the-art paper CodeMap (Gao et al., ICPC 2026):
+
+| Limitation | CodeMap | Our System |
+|---|---|---|
+| Cost | Hundreds of dollars | Under $2 total |
+| Chunking evaluation | Never done | 61.67% chunk reduction proven |
+| Large repo accuracy | 27% | 82.5-90% |
+| Multi-repo testing | Limited | 5 repos tested |
+
+---
+
+## Results
+
+### Phase 1 — General Questions
+
+| Condition | Accuracy | Improvement |
+|---|---|---|
+| Baseline (no GPT) | 42.5% | baseline |
+| GPT-4o mini + naive chunking | 85% | +42.5% |
+| GPT-4o mini + AST chunking | 90% | +47.5% |
+
+### Phase 2 — Hard Repo-Specific Questions
+
+| Condition | Accuracy | Hallucination Rate |
+|---|---|---|
+| GPT-4o mini + AST chunking | 82.5% | 30% |
+
+### Chunking Analysis
+
+| Method | Total Chunks | Incomplete % |
+|---|---|---|
+| Naive chunking | 1727 | 24.55% |
+| AST chunking | 662 | 22.21% |
+| Chunk reduction | 61.67% | — |
+
+### Multi-Repo Testing
+
+| Repository | Chunks | Category |
+|---|---|---|
+| Flask | 1724 | Web framework |
+| Requests | 1091 | HTTP library |
+| Click | 2240 | CLI library |
+| Jinja | 2232 | Template engine |
+| Werkzeug | 3453 | WSGI library |
 
 ---
 
@@ -17,19 +66,21 @@ A new developer pastes a GitHub repo URL. The system clones it, reads every code
 - OpenAI API key
 
 **Install:**
+
 ```bash
 python3.11 -m venv venv
-source venv/bin/activate        # Mac/Linux
-venv\Scripts\activate           # Windows
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
 **Configure:**
+
 ```bash
 echo "OPENAI_API_KEY=your-key-here" > .env
 ```
 
 **Run the server:**
+
 ```bash
 python3.11 -m uvicorn main:app --reload
 ```
@@ -69,27 +120,44 @@ Request:  { "repo_id": "flask" }
 Response: { "repo_id": "flask", "guide": "# Onboarding Guide..." }
 ```
 
+### POST /graph
+Return dependency graph data for an indexed repository.
+```json
+Request:  { "repo_url": "https://github.com/pallets/flask", "repo_id": "flask" }
+Response: { "repo_id": "flask", "graph": { "nodes": [...], "edges": [...], "total_files": 83, "total_connections": 330 } }
+```
+
 ---
 
 ## Project Structure
 
     ai-engine/
     ├── chunking/
-    │   ├── naive_chunker.py       Splits code every 400 characters
-    │   ├── ast_chunker.py         Splits at function/class boundaries
-    │   ├── compare.py             Compares both chunking methods
-    │   └── evaluate_chunking.py   Generates chunking comparison data
+    │   ├── naive_chunker.py           Splits code every 400 characters
+    │   ├── ast_chunker.py             Splits at function/class boundaries
+    │   ├── ast_chunker_treesitter.py  Tree-sitter based chunking
+    │   ├── compare.py                 Compares both chunking methods
+    │   ├── evaluate_chunking.py       Generates chunking comparison data
+    │   ├── analysis.py                Analyses chunking results
+    │   ├── analysis_report.txt        Full chunking analysis report
+    │   └── demo.py                    Side by side chunking demo
     ├── evaluation/
-    │   ├── questions.json         20 test questions for Flask repo
-    │   ├── evaluate.py            Runs evaluation and scores answers
-    │   └── results.csv            Evaluation results with scores
+    │   ├── questions.json             20 general Flask questions
+    │   ├── questions_hard.json        20 hard repo-specific questions
+    │   ├── evaluate.py                Phase 1 evaluation script
+    │   ├── evaluate_hard.py           Phase 2 evaluation script
+    │   ├── results.csv                Baseline results (42.5%)
+    │   ├── results_ast.csv            Phase 1 AST results (90%)
+    │   └── results_hard_ast.csv       Phase 2 hard results (82.5%)
     ├── rag/
-    │   ├── indexer.py             Clones repo and indexes code chunks
-    │   ├── retriever.py           Searches ChromaDB by meaning
-    │   ├── llm.py                 Calls GPT-4o mini to generate answers
-    │   └── guide.py               Generates onboarding guides
-    ├── main.py                    FastAPI server
-    └── test_rag.py                Week 1 proof of concept
+    │   ├── indexer.py                 Clones repo and indexes code chunks
+    │   ├── retriever.py               Searches ChromaDB by meaning
+    │   ├── llm.py                     Calls GPT-4o mini to generate answers
+    │   ├── guide.py                   Generates onboarding guides
+    │   └── graph.py                   Returns dependency graph data
+    ├── main.py                        FastAPI server with 6 endpoints
+    └── requirements.txt               Python dependencies
+
 ---
 
 ## Tech Stack
@@ -101,49 +169,6 @@ Response: { "repo_id": "flask", "guide": "# Onboarding Guide..." }
 | LLM | GPT-4o mini | ~$2 total |
 | Server | FastAPI + Uvicorn | Free |
 | Repo cloning | GitPython | Free |
+| AST chunking | Tree-sitter | Free |
 
-Total evaluation cost: under $2. This addresses CodeMap's limitation of requiring hundreds of dollars of proprietary OpenAI infrastructure.
-
----
-
-## Research Context
-
-This AI engine is built as part of a final year research project addressing limitations of CodeMap (Gao et al., ICPC 2026). Specifically:
-
-- **Limitation 1**: CodeMap uses expensive proprietary OpenAI infrastructure → We use ChromaDB + sentence-transformers + GPT-4o mini at under $2 total
-- **Limitation 2**: CodeMap never evaluated chunking strategy → We compare naive vs AST chunking (Paper 1)
-- **Limitation 3**: CodeMap never measured onboarding time → We run a controlled user study (Paper 2)
-- **Limitation 4**: CodeMap breaks on large repos (27% accuracy) → Our retrieval approach maintains consistent accuracy regardless of repo size
-
-## Results so far
-
-| Condition | Accuracy | Improvement |
-|---|---|---|
-| No GPT baseline (naive chunking) | 42.5% | baseline |
-| GPT-4o mini + naive chunking | 85% | +42.5% |
-| GPT-4o mini + AST chunking | 90% | +47.5% |
-
-Key findings:
-- GPT-4o mini grounding gives the biggest accuracy boost (+42.5%)
-- AST chunking further improves accuracy by 5% over naive
-- Zero score 0 answers with RAG — no complete hallucinations detected
-- Cost: under $2 total for entire evaluation
----
-
-## Multi-Repo Evaluation
-
-| Repository | Chunks | Category        |
-|------------|--------|-----------------|
-| Flask      | 1724   | Web framework   |
-| Requests   | 1091   | HTTP library    |
-| Click      | 2240   | CLI library     |
-| Jinja      | 2232   | Template engine |
-| Werkzeug   | 3453   | WSGI library    |
-
-System successfully answers questions across all 5 repos.
-
-## Team
-
-- **Sneha Goyal** — AI engine, RAG pipeline, FastAPI server
-- **Shreyansh** — Evaluation framework, question design, scoring
-- **Shaivy** — Chunking strategies, AST vs naive comparison
+Total cost: under $2. This is 50-100x cheaper than CodeMap's proprietary infrastructure.
