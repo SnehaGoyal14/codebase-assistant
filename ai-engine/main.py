@@ -50,10 +50,11 @@ def status(repo_id: str):
 @app.post("/ask")
 def ask(req: AskRequest):
     chunks, sources = retrieve(req.repo_id, req.question)
-    answer = get_answer(req.question, chunks, API_KEY)
+    explanation, diagram = get_answer(req.question, chunks, API_KEY)
     return {
         "question": req.question,
-        "answer": answer,
+        "answer": explanation,
+        "diagram": diagram,
         "sources": sources
     }
 

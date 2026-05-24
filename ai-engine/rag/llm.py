@@ -21,12 +21,32 @@ Code snippets:
 
 Question: {question}
 
-Answer (be specific, mention exact file names and function names):"""
+Respond in exactly this format and nothing else:
+
+EXPLANATION:
+<your detailed text explanation here>
+
+DIAGRAM:
+<a valid Mermaid diagram using graph LR syntax that visually shows the concept or flow described in your explanation. Keep it simple — maximum 8 nodes.>"""
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=500
+        max_tokens=800
     )
     
-    return response.choices[0].message.content
+    raw = response.choices[0].message.content
+
+    # Parse explanation and diagram
+    explanation = ""
+    diagram = ""
+
+    if "EXPLANATION:" in raw and "DIAGRAM:" in raw:
+        parts = raw.split("DIAGRAM:")
+        explanation = parts[0].replace("EXPLANATION:", "").strip()
+        diagram = parts[1].strip()
+    else:
+        explanation = raw
+        diagram = ""
+
+    return explanation, diagram
