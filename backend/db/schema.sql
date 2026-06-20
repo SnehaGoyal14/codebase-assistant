@@ -1,0 +1,25 @@
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS repos (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  repo_url VARCHAR(500) NOT NULL,
+  repo_id VARCHAR(255) NOT NULL,
+  indexed_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS conversations (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  repo_id VARCHAR(255) NOT NULL,
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  diagram TEXT,
+  sources TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
