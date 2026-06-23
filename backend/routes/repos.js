@@ -49,11 +49,24 @@ router.post('/index', authenticateToken, async (req, res) => {
       repo_id
     });
 
-    await pool.query(
-      `INSERT INTO repos (user_id, repo_url, repo_id)
-       VALUES ($1, $2, $3)`,
-      [req.user.id, repo_url, repo_id]
+const existingRepo = await pool.query(
+      'SELECT id FROM repos WHERE user_id = $1 AND repo_id = $2',
+      [req.user.id, repo_id]
     );
+
+    if (existingRepo.rows.length > 0) {
+      await pool.query(
+        `UPDATE repos SET repo_url = $1, indexed_at = NOW()
+         WHERE user_id = $2 AND repo_id = $3`,
+        [repo_url, req.user.id, repo_id]
+      );
+    } else {
+      await pool.query(
+        `INSERT INTO repos (user_id, repo_url, repo_id)
+         VALUES ($1, $2, $3)`,
+        [req.user.id, repo_url, repo_id]
+      );
+    }
 
     return res.status(200).json({
       success: true,
