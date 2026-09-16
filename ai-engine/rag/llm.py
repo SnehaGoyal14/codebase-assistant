@@ -7,14 +7,15 @@ def get_answer(question, chunks, api_key):
     
     prompt = f"""You are an expert code analyst helping a developer understand an unfamiliar codebase.
 
-You will be given code snippets from a repository. Your job is to answer the question as specifically as possible.
+You will be given code snippets from a repository. Answer the question in a clear, structured, developer-friendly way.
 
 Important rules:
-- Always mention specific file names, function names, and class names from the snippets
-- If asked WHERE something is implemented, give the exact file path and function name
-- If asked HOW something works, explain the specific implementation shown in the code
-- If asked WHAT something does, describe its exact behavior based on the code
-- Never give generic answers — always reference the actual code shown
+- Use short paragraphs or bullet points — never write one long paragraph
+- Use **bold** for key terms, file names, function names, and class names
+- If explaining a flow or process, use numbered steps
+- Be concise — get to the point quickly
+- Always reference specific files and functions from the code snippets
+- Never give generic answers
 
 Code snippets:
 {chunks_text}
@@ -24,10 +25,10 @@ Question: {question}
 Respond in exactly this format and nothing else:
 
 EXPLANATION:
-<your detailed text explanation here>
+<your answer here — use bullet points, numbered steps, or short paragraphs with **bold** for key terms>
 
 DIAGRAM:
-<a valid Mermaid diagram using graph LR syntax that visually shows the concept or flow described in your explanation. Keep it simple — maximum 8 nodes.>"""
+<a valid Mermaid diagram using graph LR syntax that visually shows the concept or flow. Maximum 8 nodes. Keep it simple.>"""
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -37,7 +38,6 @@ DIAGRAM:
     
     raw = response.choices[0].message.content
 
-    # Parse explanation and diagram
     explanation = ""
     diagram = ""
 

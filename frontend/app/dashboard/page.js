@@ -149,7 +149,7 @@ export default function Dashboard() {
         <div style={{ position: 'relative' }}>
           <span className="material-symbols-outlined" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '18px' }}>search</span>
           <input placeholder="Search commands or files..."
-            style={{ paddingLeft: '40px', paddingRight: '16px', paddingTop: '8px', paddingBottom: '8px', backgroundColor: '#f8fafc', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '14px', width: '320px', fontFamily: 'Inter, sans-serif', color: '#1e293b' }} />
+            style={{ paddingLeft: '40px', paddingRight: '16px', paddingTop: '8px', paddingBottom: '8px', backgroundColor: '#f8fafc', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '14px', width: '320px', fontFamily: 'Inter, sans-serif', color: '#1e293b', outline: 'none' }} />
         </div>
       </header>
 
@@ -174,12 +174,12 @@ export default function Dashboard() {
                   <span className="material-symbols-outlined" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '20px' }}>link</span>
                   <input id="repo-url-input" type="url" value={repoUrl} onChange={(e) => setRepoUrl(e.target.value)}
                     placeholder="https://github.com/username/repository" required
-                    style={{ width: '100%', paddingLeft: '40px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px', backgroundColor: '#F8F9FA', border: '1px solid #E2E8F0', borderRadius: '4px', fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', color: '#1e293b' }} />
+                    style={{ width: '100%', paddingLeft: '40px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px', backgroundColor: '#F8F9FA', border: '1px solid #E2E8F0', borderRadius: '4px', fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', color: '#1e293b', outline: 'none' }} />
                 </div>
                 <div style={{ flex: 1, minWidth: '160px' }}>
                   <input type="text" value={repoId} onChange={(e) => setRepoId(e.target.value)}
                     placeholder="repo_id (e.g. flask_ast)" required
-                    style={{ width: '100%', padding: '12px 16px', backgroundColor: '#F8F9FA', border: '1px solid #E2E8F0', borderRadius: '4px', fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', color: '#1e293b' }} />
+                    style={{ width: '100%', padding: '12px 16px', backgroundColor: '#F8F9FA', border: '1px solid #E2E8F0', borderRadius: '4px', fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', color: '#1e293b', outline: 'none' }} />
                 </div>
                 <button type="submit" disabled={indexing}
                   style={{ backgroundColor: indexing ? '#9BBFA4' : '#6F9F9C', color: 'white', padding: '12px 24px', borderRadius: '4px', border: 'none', cursor: indexing ? 'not-allowed' : 'pointer', fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}
@@ -230,28 +230,32 @@ export default function Dashboard() {
                   </div>
                   <h4 style={{ fontFamily: 'Geist, sans-serif', fontSize: '18px', fontWeight: 500, color: '#1e293b', marginBottom: '4px' }}>{getRepoName(repo)}</h4>
                   <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#94a3b8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '24px' }}>{getRepoDisplayUrl(repo)}</p>
-                  <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid #E2E8F0', display: 'flex', gap: '8px' }}>
+                  
+                  {/* Action buttons - all labeled */}
+                  <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <button onClick={() => router.push(`/chat?repo_id=${repo.repo_id}`)}
-                      style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', backgroundColor: '#6F9F9C', color: 'white', padding: '8px', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'Geist, sans-serif' }}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', backgroundColor: '#6F9F9C', color: 'white', padding: '10px', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 700, fontFamily: 'Geist, sans-serif', transition: 'background-color 0.2s' }}
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#5f8a87'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6F9F9C'}>
                       <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>chat</span>
-                      Chat
+                      Chat with Codebase
                     </button>
-                    <button onClick={() => router.push(`/guide?repo_id=${repo.repo_id}`)}
-                      style={{ padding: '8px', border: '1px solid #E2E8F0', borderRadius: '4px', backgroundColor: 'white', color: '#64748b', cursor: 'pointer', transition: 'all 0.2s' }}
-                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#6F9F9C'; e.currentTarget.style.color = '#6F9F9C'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.color = '#64748b'; }}
-                      title="Onboarding Guide">
-                      <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>auto_stories</span>
-                    </button>
-                    <button onClick={() => router.push(`/graph?repo_id=${repo.repo_id}&repo_url=${encodeURIComponent(repo.repo_url)}`)}
-                      style={{ padding: '8px', border: '1px solid #E2E8F0', borderRadius: '4px', backgroundColor: 'white', color: '#64748b', cursor: 'pointer', transition: 'all 0.2s' }}
-                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#6F9F9C'; e.currentTarget.style.color = '#6F9F9C'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.color = '#64748b'; }}
-                      title="Dependency Graph">
-                      <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>account_tree</span>
-                    </button>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                      <button onClick={() => router.push(`/guide?repo_id=${repo.repo_id}`)}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '8px', border: '1px solid #E2E8F0', borderRadius: '4px', backgroundColor: 'white', color: '#64748b', cursor: 'pointer', fontSize: '12px', fontFamily: 'JetBrains Mono, monospace', transition: 'all 0.2s' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#6F9F9C'; e.currentTarget.style.color = '#6F9F9C'; e.currentTarget.style.backgroundColor = 'rgba(111,159,156,0.05)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.color = '#64748b'; e.currentTarget.style.backgroundColor = 'white'; }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: '15px' }}>menu_book</span>
+                        Onboarding Guide
+                      </button>
+                      <button onClick={() => router.push(`/graph?repo_id=${repo.repo_id}&repo_url=${encodeURIComponent(repo.repo_url)}`)}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '8px', border: '1px solid #E2E8F0', borderRadius: '4px', backgroundColor: 'white', color: '#64748b', cursor: 'pointer', fontSize: '12px', fontFamily: 'JetBrains Mono, monospace', transition: 'all 0.2s' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#6F9F9C'; e.currentTarget.style.color = '#6F9F9C'; e.currentTarget.style.backgroundColor = 'rgba(111,159,156,0.05)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.color = '#64748b'; e.currentTarget.style.backgroundColor = 'white'; }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: '15px' }}>account_tree</span>
+                        Dependency Graph
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}

@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 function MermaidDiagram({ chart }) {
   const ref = useRef(null);
-
   useEffect(() => {
     if (!chart || !ref.current) return;
     const render = async () => {
@@ -20,8 +19,94 @@ function MermaidDiagram({ chart }) {
     };
     render();
   }, [chart]);
-
   return <div ref={ref} style={{ overflow: 'auto' }} />;
+}
+
+function renderInline(text, key) {
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+  return (
+    <span key={key}>
+      {parts.map((part, i) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return <strong key={i} style={{ fontWeight: 600, color: '#111827' }}>{part.slice(2, -2)}</strong>;
+        }
+        if (part.startsWith('`') && part.endsWith('`')) {
+          return (
+            <code key={i} style={{ padding: '2px 6px', borderRadius: '4px', backgroundColor: '#f1f5f9', border: '1px solid #e2e8f0', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', color: '#334155' }}>
+              {part.slice(1, -1)}
+            </code>
+          );
+        }
+        return part;
+      })}
+    </span>
+  );
+}
+
+function renderAnswer(text) {
+  if (!text) return null;
+  const lines = text.split('\n');
+  const result = [];
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    if (line.startsWith('- ') || line.startsWith('* ')) {
+      const items = [];
+      while (i < lines.length && (lines[i].startsWith('- ') || lines[i].startsWith('* '))) {
+        items.push(lines[i].replace(/^[-*] /, ''));
+        i++;
+      }
+      result.push(
+        <ul key={`ul-${i}`} style={{ margin: '8px 0', paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          {items.map((item, j) => (
+            <li key={j} style={{ fontSize: '14px', color: '#374151', lineHeight: '1.6', fontFamily: 'Inter, sans-serif' }}>
+              {renderInline(item, j)}
+            </li>
+          ))}
+        </ul>
+      );
+    } else if (line.match(/^\d+\. /)) {
+      const items = [];
+      while (i < lines.length && lines[i].match(/^\d+\. /)) {
+        items.push(lines[i].replace(/^\d+\. /, ''));
+        i++;
+      }
+      result.push(
+        <ol key={`ol-${i}`} style={{ margin: '8px 0', paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          {items.map((item, j) => (
+            <li key={j} style={{ fontSize: '14px', color: '#374151', lineHeight: '1.6', fontFamily: 'Inter, sans-serif' }}>
+              {renderInline(item, j)}
+            </li>
+          ))}
+        </ol>
+      );
+    } else if (line.startsWith('### ')) {
+      result.push(
+        <h3 key={`h3-${i}`} style={{ fontFamily: 'Geist, sans-serif', fontSize: '14px', fontWeight: 600, color: '#111827', margin: '12px 0 4px' }}>
+          {line.replace('### ', '')}
+        </h3>
+      );
+      i++;
+    } else if (line.startsWith('## ')) {
+      result.push(
+        <h2 key={`h2-${i}`} style={{ fontFamily: 'Geist, sans-serif', fontSize: '16px', fontWeight: 600, color: '#111827', margin: '16px 0 6px' }}>
+          {line.replace('## ', '')}
+        </h2>
+      );
+      i++;
+    } else if (line.trim() === '') {
+      result.push(<div key={`br-${i}`} style={{ height: '6px' }} />);
+      i++;
+    } else {
+      result.push(
+        <p key={`p-${i}`} style={{ fontSize: '14px', color: '#374151', lineHeight: '1.7', fontFamily: 'Inter, sans-serif', margin: '2px 0' }}>
+          {renderInline(line, i)}
+        </p>
+      );
+      i++;
+    }
+  }
+  return result;
 }
 
 function ChatPage() {
@@ -81,12 +166,10 @@ function ChatPage() {
   async function handleSend(e) {
     e?.preventDefault();
     if (!question.trim() || loading) return;
-
     const userMsg = { type: 'user', text: question, id: `u-${Date.now()}` };
     setMessages(prev => [...prev, userMsg]);
     setQuestion('');
     setLoading(true);
-
     try {
       const token = localStorage.getItem('token');
       const res = await fetch('http://localhost:3001/repos/ask', {
@@ -96,8 +179,7 @@ function ChatPage() {
       });
       const data = await res.json();
       if (res.ok) {
-        const aiMsg = { type: 'ai', answer: data.answer, diagram: data.diagram, sources: data.sources, id: `a-${Date.now()}` };
-        setMessages(prev => [...prev, aiMsg]);
+        setMessages(prev => [...prev, { type: 'ai', answer: data.answer, diagram: data.diagram, sources: data.sources, id: `a-${Date.now()}` }]);
       } else {
         setMessages(prev => [...prev, { type: 'ai', answer: data.error || 'Something went wrong.', diagram: null, sources: [], id: `a-err-${Date.now()}` }]);
       }
@@ -168,9 +250,22 @@ function ChatPage() {
               </span>
               <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#9BBFA4' }}>LIVE</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', fontWeight: 600, color: 'white' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', fontWeight: 600, color: 'white', marginBottom: '12px' }}>
               <span className="material-symbols-outlined" style={{ fontSize: '14px', color: '#6F9F9C' }}>account_tree</span>
               {repoId}
+            </div>
+            <div style={{ display: 'flex', gap: '4px' }}>
+              {[
+                { label: 'Chat', icon: 'chat', path: `/chat?repo_id=${repoId}` },
+                { label: 'Guide', icon: 'menu_book', path: `/guide?repo_id=${repoId}` },
+                { label: 'Graph', icon: 'account_tree', path: `/graph?repo_id=${repoId}` },
+              ].map((tab) => (
+                <a key={tab.label} href={tab.path}
+                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '6px 4px', borderRadius: '4px', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', textDecoration: 'none', transition: 'all 0.15s', backgroundColor: tab.label === 'Chat' ? 'rgba(111,159,156,0.2)' : 'transparent', color: tab.label === 'Chat' ? '#6F9F9C' : '#94a3b8', border: tab.label === 'Chat' ? '1px solid rgba(111,159,156,0.3)' : '1px solid transparent' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '13px' }}>{tab.icon}</span>
+                  {tab.label}
+                </a>
+              ))}
             </div>
           </div>
         </div>
@@ -267,7 +362,7 @@ function ChatPage() {
                       <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>smart_toy</span>
                     </div>
                     <div style={{ flex: 1, backgroundColor: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                      <div style={{ fontSize: '14px', color: '#111827', lineHeight: '1.7', fontFamily: 'Inter, sans-serif' }}>{msg.answer}</div>
+                      <div>{renderAnswer(msg.answer)}</div>
                       {msg.diagram && parseDiagram(msg.diagram) && (
                         <div style={{ border: '1px solid #E2E8F0', borderRadius: '6px', backgroundColor: '#F8F9FA', padding: '16px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '8px', borderBottom: '1px solid #E2E8F0' }}>
