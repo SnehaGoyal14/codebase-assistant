@@ -28,12 +28,23 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      if (!res.ok) { setError(data.error || 'Something went wrong'); return; }
+      if (!res.ok) {
+        if (res.status === 401) setError('Invalid email or password. Please try again.');
+        else if (res.status === 409) setError('This email is already registered. Try logging in instead.');
+        else if (res.status === 400) setError(data.error);
+        else if (res.status === 500) setError('Server error. Please try again in a moment.');
+        else setError(data.error || 'Something went wrong.');
+        return;
+      }
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       router.push('/dashboard');
     } catch (err) {
-      setError('Cannot connect to server. Make sure the backend is running.');
+      if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
+        setError('Cannot connect to server. Make sure the backend is running on port 3001.');
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -138,7 +149,7 @@ export default function LoginPage() {
             )}
             <button type="submit" disabled={loading}
               style={{ width: '100%', padding: '14px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, color: 'white', backgroundColor: loading ? '#6f9f9c' : '#366664', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif', transition: 'background-color 0.2s' }}
-              onMouseEnter={(e) => { if (!loading) e.target.style.backgroundColor = '#577E89'; }}
+              onMouseEnter={(e) => { if (!loading) e.target.style.backgroundColor = '#3D6B75'; }}
               onMouseLeave={(e) => { if (!loading) e.target.style.backgroundColor = '#366664'; }}>
               {loading ? 'Processing...' : mode === 'login' ? 'Sign In' : 'Create Account'}
             </button>
@@ -164,6 +175,9 @@ export default function LoginPage() {
               ))}
             </div>
           </form>
+          <p style={{ marginTop: '12px', fontSize: '12px', color: '#9ca3af', fontFamily: 'Inter, sans-serif', textAlign: 'center' }}>
+            Make sure you have an account — use Sign Up if you are new.
+          </p>
           <p style={{ marginTop: '32px', textAlign: 'center', fontSize: '13px', color: '#c0c8c7', fontFamily: 'Inter, sans-serif' }}>
             By continuing, you agree to our{' '}
             <a href="#" style={{ color: '#404848', textDecoration: 'underline', textUnderlineOffset: '4px' }}>Terms of Service</a>

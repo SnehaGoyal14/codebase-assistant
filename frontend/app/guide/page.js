@@ -50,9 +50,12 @@ function GuidePage() {
   }
 
   function handleLogout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    router.push('/');
+    const confirmed = window.confirm('Are you sure you want to log out?');
+    if (confirmed) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      router.push('/');
+    }
   }
 
   function getInitials(email) {
@@ -167,7 +170,7 @@ function GuidePage() {
       <aside style={{ width: '260px', flexShrink: 0, backgroundColor: '#1E293B', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRight: '1px solid rgba(51,65,85,0.6)', zIndex: 30 }}>
         <div>
           <div style={{ height: '64px', padding: '0 20px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid rgba(51,65,85,0.5)' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '6px', backgroundColor: 'rgba(111,159,156,0.2)', border: '1px solid rgba(111,159,156,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6F9F9C' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '6px', backgroundColor: 'rgba(74,135,132,0.2)', border: '1px solid rgba(74,135,132,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4A8784' }}>
               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>terminal</span>
             </div>
             <span style={{ fontFamily: 'Geist, sans-serif', fontWeight: 600, color: 'white', fontSize: '14px', letterSpacing: '-0.02em' }}>Codebase Assistant</span>
@@ -192,10 +195,10 @@ function GuidePage() {
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#34d399', display: 'inline-block' }}></span>
                 ACTIVE REPOSITORY
               </span>
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#9BBFA4' }}>LIVE</span>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#6F9F9C' }}>LIVE</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', fontWeight: 600, color: 'white', marginBottom: '12px' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '14px', color: '#6F9F9C' }}>account_tree</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '14px', color: '#4A8784' }}>account_tree</span>
               {repoId}
             </div>
             <div style={{ display: 'flex', gap: '4px' }}>
@@ -205,7 +208,7 @@ function GuidePage() {
                 { label: 'Graph', icon: 'account_tree', path: `/graph?repo_id=${repoId}` },
               ].map((tab) => (
                 <a key={tab.label} href={tab.path}
-                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '6px 4px', borderRadius: '4px', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', textDecoration: 'none', transition: 'all 0.15s', backgroundColor: tab.label === 'Guide' ? 'rgba(111,159,156,0.2)' : 'transparent', color: tab.label === 'Guide' ? '#6F9F9C' : '#94a3b8', border: tab.label === 'Guide' ? '1px solid rgba(111,159,156,0.3)' : '1px solid transparent' }}>
+                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '6px 4px', borderRadius: '4px', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', textDecoration: 'none', transition: 'all 0.15s', backgroundColor: tab.label === 'Guide' ? 'rgba(74,135,132,0.2)' : 'transparent', color: tab.label === 'Guide' ? '#4A8784' : '#94a3b8', border: tab.label === 'Guide' ? '1px solid rgba(74,135,132,0.3)' : '1px solid transparent' }}>
                   <span className="material-symbols-outlined" style={{ fontSize: '13px' }}>{tab.icon}</span>
                   {tab.label}
                 </a>
@@ -227,7 +230,7 @@ function GuidePage() {
             Logout
           </a>
           <div style={{ marginTop: '8px', paddingTop: '12px', borderTop: '1px solid rgba(51,65,85,0.4)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#6F9F9C', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#4A8784', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>
               {getInitials(user?.email)}
             </div>
             <div style={{ overflow: 'hidden' }}>
@@ -249,17 +252,17 @@ function GuidePage() {
         <div style={{ padding: '12px 32px', backgroundColor: 'white', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'Geist, sans-serif', fontWeight: 600, fontSize: '15px', color: '#111827' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '20px', color: '#577E89' }}>folder</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '20px', color: '#3D6B75' }}>folder</span>
               pallets / {repoId}
             </div>
-            <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', fontWeight: 500, backgroundColor: 'rgba(155,191,164,0.2)', color: '#2C5E55', border: '1px solid rgba(155,191,164,0.4)' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', fontWeight: 500, backgroundColor: 'rgba(111,159,156,0.2)', color: '#2C5E55', border: '1px solid rgba(111,159,156,0.4)' }}>
               {repoId}
             </span>
           </div>
           <button onClick={handleDownload} disabled={!guide}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontFamily: 'JetBrains Mono, monospace', color: 'white', backgroundColor: guide ? '#6F9F9C' : '#9BBFA4', border: 'none', padding: '6px 14px', borderRadius: '4px', cursor: guide ? 'pointer' : 'not-allowed' }}
-            onMouseEnter={(e) => { if (guide) e.currentTarget.style.backgroundColor = '#577E89'; }}
-            onMouseLeave={(e) => { if (guide) e.currentTarget.style.backgroundColor = '#6F9F9C'; }}>
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontFamily: 'JetBrains Mono, monospace', color: 'white', backgroundColor: guide ? '#4A8784' : '#6F9F9C', border: 'none', padding: '6px 14px', borderRadius: '4px', cursor: guide ? 'pointer' : 'not-allowed' }}
+            onMouseEnter={(e) => { if (guide) e.currentTarget.style.backgroundColor = '#3D6B75'; }}
+            onMouseLeave={(e) => { if (guide) e.currentTarget.style.backgroundColor = '#4A8784'; }}>
             <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>download</span>
             Download Guide (.md)
           </button>
@@ -269,7 +272,7 @@ function GuidePage() {
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             {loading ? (
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px', gap: '16px' }}>
-                <div style={{ width: '40px', height: '40px', border: '3px solid #E2E8F0', borderTopColor: '#6F9F9C', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                <div style={{ width: '40px', height: '40px', border: '3px solid #E2E8F0', borderTopColor: '#4A8784', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
                 <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', color: '#64748b' }}>Generating your onboarding guide...</p>
               </div>
             ) : error ? (
@@ -280,14 +283,14 @@ function GuidePage() {
               <div style={{ backgroundColor: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                 <div style={{ padding: '24px 32px', borderBottom: '1px solid #E2E8F0' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 10px', borderRadius: '4px', backgroundColor: 'rgba(111,159,156,0.1)', border: '1px solid rgba(111,159,156,0.3)', fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#577E89' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 10px', borderRadius: '4px', backgroundColor: 'rgba(74,135,132,0.1)', border: '1px solid rgba(74,135,132,0.3)', fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#3D6B75' }}>
                       <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>menu_book</span>
                       AI Architectural Digest
                     </span>
                     <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#94a3b8' }}>• Synthesized from indexed AST chunks</span>
                   </div>
                   <h1 style={{ fontFamily: 'Geist, sans-serif', fontSize: '24px', fontWeight: 700, color: '#111827', marginBottom: '8px', letterSpacing: '-0.02em' }}>
-                    Onboarding & Architecture Guide: <span style={{ color: '#6F9F9C' }}>{repoId}</span>
+                    Onboarding & Architecture Guide: <span style={{ color: '#4A8784' }}>{repoId}</span>
                   </h1>
                   <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#64748b', lineHeight: '1.6' }}>
                     This developer guide outlines core structures, key components, and mental models required to understand and contribute to this codebase.
@@ -298,7 +301,7 @@ function GuidePage() {
                     <div key={idx} style={{ marginTop: '32px', paddingTop: '24px', borderTop: idx > 0 ? '1px solid #f1f5f9' : 'none' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                         <h2 style={{ fontFamily: 'Geist, sans-serif', fontSize: '18px', fontWeight: 600, color: '#111827', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '16px', fontWeight: 700, color: '#6F9F9C' }}>
+                          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '16px', fontWeight: 700, color: '#4A8784' }}>
                             {String(idx + 1).padStart(2, '0')}.
                           </span>
                           {section.title.replace(/^\d+\.\s*/, '')}
@@ -309,7 +312,7 @@ function GuidePage() {
                           </span>
                         )}
                       </div>
-                      <div style={{ borderLeft: '2px solid #6F9F9C', paddingLeft: '16px' }}>
+                      <div style={{ borderLeft: '2px solid #4A8784', paddingLeft: '16px' }}>
                         {renderContent(section.content)}
                       </div>
                     </div>

@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import os
@@ -76,6 +76,19 @@ def graph(req: GraphRequest):
     finally:
         if os.path.exists(local_path):
             shutil.rmtree(local_path, ignore_errors=True)
+
+@app.post("/delete")
+async def delete_repo(request: Request):
+    data = await request.json()
+    repo_id = data.get("repo_id")
+    if not repo_id:
+        return {"error": "repo_id is required"}
+    try:
+        client = chromadb.PersistentClient(path="./chroma_db")
+        client.delete_collection(repo_id)
+        return {"success": True, "message": f"Deleted {repo_id}"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
 
 @app.get("/")
 def root():

@@ -29,7 +29,7 @@ def clone_repo(repo_url, local_path="temp_repo"):
 
 def get_code_files(repo_path):
     code_files = []
-    extensions = ['.py', '.js', '.ts', '.java']
+    extensions = ['.py', '.js', '.jsx', '.ts', '.tsx', '.java', '.cpp', '.c', '.h', '.hpp', '.go', '.rb', '.rs']
     skip_folders = ['node_modules', '.git', 'venv', '__pycache__']
 
     for root, dirs, files in os.walk(repo_path):

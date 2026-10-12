@@ -113,6 +113,7 @@ function ChatPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const repoId = searchParams.get('repo_id');
+  const questionParam = searchParams.get('question');
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -137,6 +138,14 @@ function ChatPage() {
     if (!repoId) { router.push('/dashboard'); return; }
     if (userData) setUser(JSON.parse(userData));
     fetchHistory(token);
+    if (questionParam && questionParam.trim() !== '') {
+      setQuestion(questionParam);
+      setTimeout(() => {
+        handleSendWithQuestion(questionParam, token);
+        setQuestion('');
+        window.history.replaceState({}, '', `/chat?repo_id=${repoId}`);
+      }, 500);
+    }
   }, [repoId]);
 
   useEffect(() => {
@@ -160,6 +169,28 @@ function ChatPage() {
       console.error('Failed to fetch history');
     } finally {
       setLoadingHistory(false);
+    }
+  }
+
+  async function handleSendWithQuestion(q, token) {
+    const userMsg = { type: 'user', text: q, id: `u-${Date.now()}` };
+    setMessages(prev => [...prev, userMsg]);
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:3001/repos/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ repo_id: repoId, question: q })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMessages(prev => [...prev, { type: 'ai', answer: data.answer, diagram: data.diagram, sources: data.sources, id: `a-${Date.now()}` }]);
+      }
+    } catch (err) {
+      setMessages(prev => [...prev, { type: 'ai', answer: 'Cannot connect to server.', diagram: null, sources: [], id: `a-err-${Date.now()}` }]);
+    } finally {
+      setLoading(false);
+      setQuestion('');
     }
   }
 
@@ -201,9 +232,12 @@ function ChatPage() {
   }
 
   function handleLogout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    router.push('/');
+    const confirmed = window.confirm('Are you sure you want to log out?');
+    if (confirmed) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      router.push('/');
+    }
   }
 
   function getInitials(email) {
@@ -223,7 +257,7 @@ function ChatPage() {
       <aside style={{ width: '260px', flexShrink: 0, backgroundColor: '#1E293B', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRight: '1px solid rgba(51,65,85,0.6)', zIndex: 30 }}>
         <div>
           <div style={{ height: '64px', padding: '0 20px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid rgba(51,65,85,0.5)' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '6px', backgroundColor: 'rgba(111,159,156,0.2)', border: '1px solid rgba(111,159,156,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6F9F9C' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '6px', backgroundColor: 'rgba(74,135,132,0.2)', border: '1px solid rgba(74,135,132,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4A8784' }}>
               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>terminal</span>
             </div>
             <span style={{ fontFamily: 'Geist, sans-serif', fontWeight: 600, color: 'white', fontSize: '14px', letterSpacing: '-0.02em' }}>Codebase Assistant</span>
@@ -248,10 +282,10 @@ function ChatPage() {
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#34d399', display: 'inline-block' }}></span>
                 ACTIVE REPOSITORY
               </span>
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#9BBFA4' }}>LIVE</span>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#6F9F9C' }}>LIVE</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', fontWeight: 600, color: 'white', marginBottom: '12px' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '14px', color: '#6F9F9C' }}>account_tree</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '14px', color: '#4A8784' }}>account_tree</span>
               {repoId}
             </div>
             <div style={{ display: 'flex', gap: '4px' }}>
@@ -261,7 +295,7 @@ function ChatPage() {
                 { label: 'Graph', icon: 'account_tree', path: `/graph?repo_id=${repoId}` },
               ].map((tab) => (
                 <a key={tab.label} href={tab.path}
-                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '6px 4px', borderRadius: '4px', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', textDecoration: 'none', transition: 'all 0.15s', backgroundColor: tab.label === 'Chat' ? 'rgba(111,159,156,0.2)' : 'transparent', color: tab.label === 'Chat' ? '#6F9F9C' : '#94a3b8', border: tab.label === 'Chat' ? '1px solid rgba(111,159,156,0.3)' : '1px solid transparent' }}>
+                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '6px 4px', borderRadius: '4px', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', textDecoration: 'none', transition: 'all 0.15s', backgroundColor: tab.label === 'Chat' ? 'rgba(74,135,132,0.2)' : 'transparent', color: tab.label === 'Chat' ? '#4A8784' : '#94a3b8', border: tab.label === 'Chat' ? '1px solid rgba(74,135,132,0.3)' : '1px solid transparent' }}>
                   <span className="material-symbols-outlined" style={{ fontSize: '13px' }}>{tab.icon}</span>
                   {tab.label}
                 </a>
@@ -283,7 +317,7 @@ function ChatPage() {
             Logout
           </a>
           <div style={{ marginTop: '8px', paddingTop: '12px', borderTop: '1px solid rgba(51,65,85,0.4)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#6F9F9C', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#4A8784', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>
               {getInitials(user?.email)}
             </div>
             <div style={{ overflow: 'hidden' }}>
@@ -305,20 +339,28 @@ function ChatPage() {
         <div style={{ padding: '12px 32px', backgroundColor: 'white', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'Geist, sans-serif', fontWeight: 600, fontSize: '15px', color: '#111827' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '20px', color: '#577E89' }}>folder</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '20px', color: '#3D6B75' }}>folder</span>
               {repoId}
             </div>
-            <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', fontWeight: 500, backgroundColor: 'rgba(155,191,164,0.2)', color: '#2C5E55', border: '1px solid rgba(155,191,164,0.4)' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', fontWeight: 500, backgroundColor: 'rgba(111,159,156,0.2)', color: '#2C5E55', border: '1px solid rgba(111,159,156,0.4)' }}>
               {repoId}
             </span>
           </div>
-          <button onClick={() => setMessages([])}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontFamily: 'JetBrains Mono, monospace', color: '#64748b', backgroundColor: '#F8F9FA', border: '1px solid #E2E8F0', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer' }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f1f5f9'; e.currentTarget.style.color = '#111827'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#F8F9FA'; e.currentTarget.style.color = '#64748b'; }}>
-            <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>restart_alt</span>
-            Reset Session
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', color: '#94a3b8' }}>Clears current view</span>
+            <button onClick={() => {
+              const confirmed = window.confirm('Reset session? This will clear the conversation from your view but not delete it from history.');
+              if (confirmed) {
+                setMessages([]);
+              }
+            }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontFamily: 'JetBrains Mono, monospace', color: '#64748b', backgroundColor: '#F8F9FA', border: '1px solid #E2E8F0', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f1f5f9'; e.currentTarget.style.color = '#111827'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#F8F9FA'; e.currentTarget.style.color = '#64748b'; }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>restart_alt</span>
+              Reset Session
+            </button>
+          </div>
         </div>
 
         <main style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', paddingBottom: '140px', display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '900px', width: '100%', margin: '0 auto' }}>
@@ -326,7 +368,7 @@ function ChatPage() {
             <div style={{ textAlign: 'center', padding: '48px', color: '#64748b', fontSize: '14px' }}>Loading conversation...</div>
           ) : messages.length === 0 ? (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 24px', textAlign: 'center' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'rgba(111,159,156,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6F9F9C', marginBottom: '16px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'rgba(74,135,132,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4A8784', marginBottom: '16px' }}>
                 <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>chat_bubble_outline</span>
               </div>
               <h4 style={{ fontFamily: 'Geist, sans-serif', fontWeight: 500, fontSize: '15px', color: '#111827', marginBottom: '8px' }}>Ask your first question</h4>
@@ -349,16 +391,16 @@ function ChatPage() {
               <div key={msg.id}>
                 {msg.type === 'user' ? (
                   <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', gap: '12px', paddingLeft: '64px' }}>
-                    <div style={{ backgroundColor: '#6F9F9C', color: 'white', borderRadius: '8px', padding: '12px 16px', fontSize: '14px', lineHeight: '1.6', maxWidth: '560px', fontFamily: 'Inter, sans-serif' }}>
+                    <div style={{ backgroundColor: '#4A8784', color: 'white', borderRadius: '8px', padding: '12px 16px', fontSize: '14px', lineHeight: '1.6', maxWidth: '560px', fontFamily: 'Inter, sans-serif' }}>
                       {msg.text}
                     </div>
-                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: '#577E89', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: '10px', fontWeight: 600, flexShrink: 0, marginTop: '2px' }}>
+                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: '#3D6B75', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: '10px', fontWeight: 600, flexShrink: 0, marginTop: '2px' }}>
                       YOU
                     </div>
                   </div>
                 ) : (
                   <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', gap: '12px', paddingRight: '32px' }}>
-                    <div style={{ width: '28px', height: '28px', borderRadius: '6px', backgroundColor: 'rgba(111,159,156,0.15)', border: '1px solid rgba(111,159,156,0.3)', color: '#577E89', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '2px' }}>
+                    <div style={{ width: '28px', height: '28px', borderRadius: '6px', backgroundColor: 'rgba(74,135,132,0.15)', border: '1px solid rgba(74,135,132,0.3)', color: '#3D6B75', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '2px' }}>
                       <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>smart_toy</span>
                     </div>
                     <div style={{ flex: 1, backgroundColor: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -367,7 +409,7 @@ function ChatPage() {
                         <div style={{ border: '1px solid #E2E8F0', borderRadius: '6px', backgroundColor: '#F8F9FA', padding: '16px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '8px', borderBottom: '1px solid #E2E8F0' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <span className="material-symbols-outlined" style={{ color: '#6F9F9C', fontSize: '16px' }}>schema</span>
+                              <span className="material-symbols-outlined" style={{ color: '#4A8784', fontSize: '16px' }}>schema</span>
                               <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#475569' }}>Architecture Diagram</span>
                             </div>
                             <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '10px', color: '#94a3b8', backgroundColor: 'white', border: '1px solid #E2E8F0', padding: '2px 8px', borderRadius: '4px' }}>flowchart</span>
@@ -408,13 +450,13 @@ function ChatPage() {
           )}
           {loading && (
             <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', gap: '12px' }}>
-              <div style={{ width: '28px', height: '28px', borderRadius: '6px', backgroundColor: 'rgba(111,159,156,0.15)', border: '1px solid rgba(111,159,156,0.3)', color: '#577E89', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ width: '28px', height: '28px', borderRadius: '6px', backgroundColor: 'rgba(74,135,132,0.15)', border: '1px solid rgba(74,135,132,0.3)', color: '#3D6B75', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>smart_toy</span>
               </div>
               <div style={{ backgroundColor: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ display: 'flex', gap: '4px' }}>
                   {[0, 1, 2].map(i => (
-                    <span key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#6F9F9C', display: 'inline-block', animation: `bounce 1s ${i * 0.2}s infinite` }}></span>
+                    <span key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#4A8784', display: 'inline-block', animation: `bounce 1s ${i * 0.2}s infinite` }}></span>
                   ))}
                 </span>
                 <span style={{ fontSize: '13px', color: '#64748b', fontFamily: 'Inter, sans-serif' }}>Analyzing codebase...</span>
@@ -437,9 +479,9 @@ function ChatPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingRight: '4px' }}>
                   <span style={{ fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', color: '#94a3b8' }}>Return to send</span>
                   <button type="submit" disabled={loading || !question.trim()}
-                    style={{ width: '36px', height: '36px', backgroundColor: loading || !question.trim() ? '#9BBFA4' : '#6F9F9C', color: 'white', border: 'none', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: loading || !question.trim() ? 'not-allowed' : 'pointer' }}
-                    onMouseEnter={(e) => { if (!loading && question.trim()) e.currentTarget.style.backgroundColor = '#577E89'; }}
-                    onMouseLeave={(e) => { if (!loading && question.trim()) e.currentTarget.style.backgroundColor = '#6F9F9C'; }}>
+                    style={{ width: '36px', height: '36px', backgroundColor: loading || !question.trim() ? '#6F9F9C' : '#4A8784', color: 'white', border: 'none', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: loading || !question.trim() ? 'not-allowed' : 'pointer' }}
+                    onMouseEnter={(e) => { if (!loading && question.trim()) e.currentTarget.style.backgroundColor = '#3D6B75'; }}
+                    onMouseLeave={(e) => { if (!loading && question.trim()) e.currentTarget.style.backgroundColor = '#4A8784'; }}>
                     <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>arrow_upward</span>
                   </button>
                 </div>
@@ -447,7 +489,7 @@ function ChatPage() {
             </form>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 4px 0', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', color: '#94a3b8' }}>
               <span>AI answers synthesize code analysis, AST flowcharts, and source locations.</span>
-              <span>Context: <span style={{ color: '#577E89', fontWeight: 500 }}>{repoId}</span></span>
+              <span>Context: <span style={{ color: '#3D6B75', fontWeight: 500 }}>{repoId}</span></span>
             </div>
           </div>
         </div>

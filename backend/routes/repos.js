@@ -97,6 +97,33 @@ router.post('/graph', authenticateToken, async (req, res) => {
   }
 });
 
+// DELETE /repos/:repo_id
+router.delete('/:repo_id', authenticateToken, async (req, res) => {
+  try {
+    const { repo_id } = req.params;
+
+    // Delete from ChromaDB via FastAPI
+    const fastapiRes = await axios.post(`${process.env.FASTAPI_URL}/delete`, { repo_id });
+
+    // Delete conversations from DB
+    await pool.query(
+      'DELETE FROM conversations WHERE user_id = $1 AND repo_id = $2',
+      [req.user.id, repo_id]
+    );
+
+    // Delete repo from DB
+    await pool.query(
+      'DELETE FROM repos WHERE user_id = $1 AND repo_id = $2',
+      [req.user.id, repo_id]
+    );
+
+    return res.json({ success: true, message: 'Repo deleted' });
+  } catch (err) {
+    console.error('Delete repo error:', err.message);
+    return res.status(500).json({ success: false, error: 'Failed to delete repo' });
+  }
+});
+
 // GET /repos/history/:repo_id
 router.get('/history/:repo_id', authenticateToken, async (req, res) => {
   try {
