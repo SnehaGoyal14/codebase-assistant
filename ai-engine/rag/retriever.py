@@ -4,7 +4,7 @@ from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('all-MiniLM-L6-v2')
 client = chromadb.PersistentClient(path="chroma_db")
 
-def retrieve(repo_id, question, n_results=10):
+def retrieve(repo_id, question, n_results=15):
     col = client.get_collection(repo_id)
     q_emb = model.encode([question]).tolist()
     results = col.query(query_embeddings=q_emb, n_results=n_results)

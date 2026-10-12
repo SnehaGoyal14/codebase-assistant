@@ -16,6 +16,7 @@ Important rules:
 - Be concise — get to the point quickly
 - Always reference specific files and functions from the code snippets
 - Never give generic answers
+- Every factual claim must be directly traceable to the code snippets above. If the snippets do not contain enough information to answer confidently, state that clearly before attempting an answer.
 
 Code snippets:
 {chunks_text}

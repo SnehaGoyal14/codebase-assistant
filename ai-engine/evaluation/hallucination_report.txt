@@ -1,0 +1,26 @@
+Q1: 3/3 terms verified ✓
+Q2: 1/1 terms verified ✓
+Q3: 6/7 terms verified, 1 unverified: ['blueprints.py']
+Q4: 10/11 terms verified, 1 unverified: ['route registration']
+Q5: 5/5 terms verified ✓
+Q6: 5/9 terms verified, 4 unverified: ['Request dispatching', 'Preprocessing the request', 'Dispatching the request', 'Processing the response']
+Q7: 8/9 terms verified, 1 unverified: ['teardown_appcontext(f)']
+Q8: 2/3 terms verified, 1 unverified: ['teardown_request(f)']
+Q9: 4/12 terms verified, 8 unverified: ['WSGI Entry', 'Request Context Creation', 'Middleware and Hooks', 'Route Handling', 'Response Generation', 'from_response_status()', 'Post-processing', 'Final Response']
+Q10: 2/4 terms verified, 2 unverified: ['Preprocessing', 'Exception handling']
+Q11: 6/6 terms verified ✓
+Q12: 6/6 terms verified ✓
+Q13: 12/16 terms verified, 4 unverified: ['Session Handling Process', 'Testing and Configuration', 'test_open_session_with_endpoint', 'Session Properties']
+Q14: 4/12 terms verified, 8 unverified: ['Signals', 'signals.py', 'Triggering of Signals', 'Before a request', 'After a request', 'app-defined signals', 'Signal Name', 'Emission']
+Q15: 7/10 terms verified, 3 unverified: ['Jinja filters', '@app.template_global()', '@app.template_filter()']
+Q16: 0/4 terms verified, 4 unverified: ['test_multi_route_rules', 'test_http_error_subclass_handling', 'test_before_after_request_order', 'test_template_test_after_route_with_template']
+Q17: 1/5 terms verified, 4 unverified: ['Testing Assertions', 'Session Transactions', 'Fixtures', 'Parameterization']
+Q18: 6/6 terms verified ✓
+Q19: 8/8 terms verified ✓
+Q20: 4/6 terms verified, 2 unverified: ['scaffold.py', 'context stacks']
+
+Summary:
+  Total terms checked:                 143
+  Verified:                            100
+  Unverified (possible hallucinations): 43
+  Questions with unverified terms:     13/20
