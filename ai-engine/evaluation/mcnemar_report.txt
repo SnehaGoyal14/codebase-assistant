@@ -1,0 +1,51 @@
+============================================================
+McNemar's Test: Naive Chunking vs AST Chunking
+============================================================
+
+── Accuracy ──────────────────────────────────────────────
+  Naive chunking  — graded: 85.0%   binary: 100.0%
+  AST chunking    — graded: 87.5%   binary: 100.0%
+  (Graded = total_score / 40 max pts; Binary = score >= 1)
+
+── Binary Contingency Table ──────────────────────────────
+                 AST correct   AST incorrect
+  Naive correct        20             0
+  Naive incorrect       0             0
+  b (naive✓, AST✗) = 0
+  c (naive✗, AST✓) = 0
+
+── McNemar's Test (binary threshold: score ≥ 1) ─────────
+  Method           : exact binomial
+  Chi-square       : 0.0000
+  p-value          : 1.0000
+  Significant      : NO (p ≥ 0.05)
+  Odds ratio (b/c) : undefined (no discordant pairs)
+
+  ⚠  INTERPRETATION: Both systems classified every question
+     as 'correct' (score ≥ 1). There are no discordant pairs
+     (b = c = 0), so McNemar's test is trivially non-significant.
+     The graded score difference (85.0% → 87.5%) is real but
+     reflects a shift from score=1 to score=2, not 0→1.
+     Use the sign test below for a more sensitive comparison.
+
+── Sign Test on Raw Graded Scores (0-2) ──────────────────
+  Questions where AST scored higher  : 1
+  Questions where Naive scored higher : 0
+  Tied questions                      : 19
+  p-value (two-sided exact)           : 1.0000
+  Significant                         : NO (p ≥ 0.05)
+
+  INTERPRETATION: AST chunking improved 1 questions and
+  worsened 0 (with 19 tied). The sign test
+  does not confirm a significant difference at p < 0.05.
+
+============================================================
+SUMMARY
+============================================================
+  Naive chunking accuracy  : 85.0%
+  AST chunking accuracy    : 87.5%
+  Improvement              : +2.5pp
+  McNemar p-value          : 1.0000 (not significant)
+  Sign test p-value        : 1.0000 (not significant)
+  Conclusion               : The 2.5pp improvement is present but not statistically significant at p<0.05 with n=20.
+============================================================

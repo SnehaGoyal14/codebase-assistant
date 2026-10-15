@@ -1,0 +1,21 @@
+id,question,answer,score,notes,hallucination
+1,What is the entry point of a Flask application?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+2,How does routing work in Flask?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+3,How do you define a route with a URL parameter?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+4,What is the purpose of the application context in Flask?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+5,What is the difference between the application context and the request context?,Retrieved chunks only (no LLM generation),0,Baseline: TF-IDF keyword retrieval without LLM,N/A
+6,How does Flask handle HTTP request data like form inputs and JSON?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+7,How do you return a JSON response from a Flask route?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+8,What is a Blueprint and how is it used to organize routes?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+9,How does Flask manage configuration settings?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+10,How do you run Flask in debug mode and what does it enable?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+11,What is the purpose of the before_request and after_request hooks?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+12,How does Flask handle errors and custom error pages?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+13,How does session management work in Flask?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+14,What is the g object in Flask and when should it be used?,Retrieved chunks only (no LLM generation),0,Baseline: TF-IDF keyword retrieval without LLM,N/A
+15,How does Flask integrate with Jinja2 for template rendering?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+16,How are static files served in a Flask application?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+17,How does Flask use the WSGI standard to interface with web servers?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+18,What is the role of the Flask CLI and how do you add custom commands?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+19,How does Flask handle signals and what are they used for?,Retrieved chunks only (no LLM generation),1,Baseline: TF-IDF keyword retrieval without LLM,N/A
+20,How do you write and run tests for a Flask application?,Retrieved chunks only (no LLM generation),0,Baseline: TF-IDF keyword retrieval without LLM,N/A
