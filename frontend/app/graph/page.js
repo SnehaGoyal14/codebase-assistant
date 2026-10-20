@@ -247,7 +247,12 @@ function GraphPage() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: '#F8F9FA' }}>
               <div style={{ padding: '24px', backgroundColor: 'rgba(186,26,26,0.1)', border: '1px solid rgba(186,26,26,0.3)', borderRadius: '8px', color: '#fca5a5', fontSize: '14px', fontFamily: 'JetBrains Mono, monospace' }}>{error}</div>
             </div>
-          ) : ForceGraph && filteredData ? (
+          ) : !ForceGraph ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, gap: '16px', backgroundColor: '#F8F9FA' }}>
+              <div style={{ width: '40px', height: '40px', border: '3px solid rgba(74,135,132,0.2)', borderTopColor: '#4A8784', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+              <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', color: '#4A8784' }}>Loading graph...</p>
+            </div>
+          ) : filteredData ? (
             <>
               <ForceGraph
                 ref={el => {
