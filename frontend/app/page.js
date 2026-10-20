@@ -153,36 +153,9 @@ export default function LoginPage() {
               onMouseLeave={(e) => { if (!loading) e.target.style.backgroundColor = '#366664'; }}>
               {loading ? 'Processing...' : mode === 'login' ? 'Sign In' : 'Create Account'}
             </button>
-            <div style={{ position: 'relative', padding: '8px 0' }}>
-              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center' }}>
-                <div style={{ width: '100%', borderTop: '1px solid #c0c8c7' }} />
-              </div>
-              <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-                <span style={{ padding: '0 16px', backgroundColor: '#ffffff', fontSize: '11px', color: '#c0c8c7', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Or continue with</span>
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              {[
-                { name: 'GitHub', svg: <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z" fill="currentColor"/></svg> },
-                { name: 'Google', svg: <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12.48 10.92V14.6h6.73c-.24 1.22-.88 2.25-1.92 2.95c-1.04.7-2.4 1.1-4.81 1.1c-3.15 0-5.83-2.13-6.78-5a6.99 6.99 0 0 1 0-4.3c.95-2.87 3.63-5 6.78-5c1.69 0 3.14.58 4.3 1.66l2.84-2.84C17.15 1.34 15.01.5 12.48.5C7.62.5 3.54 3.3 1.41 7.37a11.16 11.16 0 0 0 0 9.26c2.13 4.07 6.21 6.87 11.07 6.87c3.2 0 5.89-1.06 7.84-2.88c2.19-2.06 3.42-5.12 3.42-8.7c0-.52-.04-1.03-.12-1.53l-10.14-.02z" fill="currentColor"/></svg> },
-              ].map(({ name, svg }) => (
-                <button key={name} type="button"
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', border: '1px solid #c0c8c7', borderRadius: '6px', fontSize: '14px', fontFamily: 'Inter, sans-serif', color: '#141b2b', backgroundColor: '#ffffff', cursor: 'pointer', transition: 'background-color 0.2s' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f1f3ff'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}>
-                  {svg} {name}
-                </button>
-              ))}
-            </div>
           </form>
           <p style={{ marginTop: '12px', fontSize: '12px', color: '#9ca3af', fontFamily: 'Inter, sans-serif', textAlign: 'center' }}>
             Make sure you have an account — use Sign Up if you are new.
-          </p>
-          <p style={{ marginTop: '32px', textAlign: 'center', fontSize: '13px', color: '#c0c8c7', fontFamily: 'Inter, sans-serif' }}>
-            By continuing, you agree to our{' '}
-            <a href="#" style={{ color: '#404848', textDecoration: 'underline', textUnderlineOffset: '4px' }}>Terms of Service</a>
-            {' '}and{' '}
-            <a href="#" style={{ color: '#404848', textDecoration: 'underline', textUnderlineOffset: '4px' }}>Privacy Policy</a>.
           </p>
         </div>
       </section>
