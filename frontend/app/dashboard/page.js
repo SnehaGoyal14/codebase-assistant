@@ -25,7 +25,7 @@ export default function Dashboard() {
 
   async function fetchRepos(token) {
     try {
-      const res = await fetch('http://localhost:3001/repos', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}/repos`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
@@ -53,7 +53,7 @@ export default function Dashboard() {
     const indexedRepoId = repoId.trim();
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3001/repos/index', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}/repos/index`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ repo_url: repoUrl, repo_id: indexedRepoId })
@@ -78,7 +78,7 @@ export default function Dashboard() {
     setDeletingId(repo.repo_id);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:3001/repos/${repo.repo_id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}/repos/${repo.repo_id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -98,7 +98,7 @@ export default function Dashboard() {
     setReindexingId(repo.repo_id);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3001/repos/index', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}/repos/index`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ repo_url: repo.repo_url, repo_id: repo.repo_id })

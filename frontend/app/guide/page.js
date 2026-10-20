@@ -23,7 +23,7 @@ function GuidePage() {
 
   async function fetchGuide(token) {
     try {
-      const res = await fetch('http://localhost:3001/repos/guide', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}/repos/guide`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ repo_id: repoId })

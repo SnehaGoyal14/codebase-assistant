@@ -22,7 +22,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const endpoint = mode === 'login' ? '/auth/login' : '/auth/signup';
-      const res = await fetch(`http://localhost:3001${endpoint}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

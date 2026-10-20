@@ -45,7 +45,7 @@ function GraphPage() {
 
   async function fetchGraph(token) {
     try {
-      const res = await fetch('http://localhost:3001/repos/graph', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}/repos/graph`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ repo_id: repoId, repo_url: repoUrl || '' })
