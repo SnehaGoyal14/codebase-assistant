@@ -127,10 +127,7 @@ export default function LoginPage() {
                 style={{ width: '100%', padding: '12px 16px', border: '1px solid #c0c8c7', borderRadius: '6px', fontSize: '14px', fontFamily: 'Inter, sans-serif', color: '#141b2b', backgroundColor: '#ffffff' }} />
             </div>
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                <label style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', fontWeight: 500, color: '#707978', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Password</label>
-                {mode === 'login' && <a href="#" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#366664' }}>Forgot?</a>}
-              </div>
+              <label style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', fontWeight: 500, color: '#707978', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '8px' }}>Password</label>
               <div style={{ position: 'relative' }}>
                 <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required
                   style={{ width: '100%', padding: '12px 44px 12px 16px', border: '1px solid #c0c8c7', borderRadius: '6px', fontSize: '14px', fontFamily: 'Inter, sans-serif', color: '#141b2b', backgroundColor: '#ffffff' }} />

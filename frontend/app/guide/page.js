@@ -217,12 +217,6 @@ function GuidePage() {
           </div>
         </div>
         <div style={{ padding: '12px', borderTop: '1px solid rgba(51,65,85,0.6)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <a href="#" style={navItemStyle}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(30,41,59,0.8)'; e.currentTarget.style.color = 'white'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#cbd5e1'; }}>
-            <span className="material-symbols-outlined" style={{ fontSize: '19px', color: '#94a3b8' }}>settings</span>
-            Settings
-          </a>
           <a href="#" onClick={handleLogout} style={navItemStyle}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(30,41,59,0.8)'; e.currentTarget.style.color = 'white'; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#cbd5e1'; }}>
@@ -241,14 +235,6 @@ function GuidePage() {
       </aside>
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, height: '100%', overflow: 'hidden' }}>
-        <header style={{ height: '64px', backgroundColor: 'white', borderBottom: '1px solid #E2E8F0', padding: '0 24px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-          <div style={{ position: 'relative', width: '320px' }}>
-            <span className="material-symbols-outlined" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '18px' }}>search</span>
-            <input placeholder="Search symbols, routes, files..."
-              style={{ width: '100%', backgroundColor: '#F8F9FA', border: '1px solid #E2E8F0', color: '#111827', paddingLeft: '36px', paddingRight: '16px', paddingTop: '6px', paddingBottom: '6px', borderRadius: '6px', fontSize: '12px', fontFamily: 'JetBrains Mono, monospace', outline: 'none' }} />
-          </div>
-        </header>
-
         <div style={{ padding: '12px 32px', backgroundColor: 'white', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'Geist, sans-serif', fontWeight: 600, fontSize: '15px', color: '#111827' }}>

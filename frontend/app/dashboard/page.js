@@ -157,6 +157,7 @@ export default function Dashboard() {
             <span>Dashboard</span>
           </div>
           <div style={navItemStyle}
+            onClick={() => document.getElementById('repos-section')?.scrollIntoView({ behavior: 'smooth' })}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(51,65,85,0.5)'; e.currentTarget.style.color = 'white'; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#94a3b8'; }}>
             <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>folder_open</span>
@@ -176,12 +177,6 @@ export default function Dashboard() {
           </div>
         </nav>
         <div style={{ borderTop: '1px solid rgba(51,65,85,0.5)', paddingTop: '16px' }}>
-          <div style={navItemStyle}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(51,65,85,0.5)'; e.currentTarget.style.color = 'white'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#94a3b8'; }}>
-            <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>settings</span>
-            <span>Settings</span>
-          </div>
           <div style={navItemStyle} onClick={handleLogout}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(51,65,85,0.5)'; e.currentTarget.style.color = 'white'; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#94a3b8'; }}>
@@ -199,15 +194,7 @@ export default function Dashboard() {
         </div>
       </aside>
 
-      <header style={{ position: 'fixed', top: 0, right: 0, left: '260px', height: '64px', backgroundColor: 'white', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', padding: '0 32px', zIndex: 40 }}>
-        <div style={{ position: 'relative' }}>
-          <span className="material-symbols-outlined" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '18px' }}>search</span>
-          <input placeholder="Search commands or files..."
-            style={{ paddingLeft: '40px', paddingRight: '16px', paddingTop: '8px', paddingBottom: '8px', backgroundColor: '#f8fafc', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '14px', width: '320px', fontFamily: 'Inter, sans-serif', color: '#1e293b', outline: 'none' }} />
-        </div>
-      </header>
-
-      <main style={{ marginLeft: '260px', marginTop: '64px', padding: '32px' }}>
+      <main style={{ marginLeft: '260px', padding: '32px' }}>
         <section style={{ marginBottom: '48px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
             <div>
@@ -270,7 +257,7 @@ export default function Dashboard() {
           </div>
         </section>
 
-        <section>
+        <section id="repos-section">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <h3 style={{ fontFamily: 'Geist, sans-serif', fontSize: '18px', fontWeight: 500, color: '#1e293b' }}>Your repositories</h3>

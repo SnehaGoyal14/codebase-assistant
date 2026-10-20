@@ -184,10 +184,6 @@ function GraphPage() {
           </div>
         </div>
         <div style={{ padding: '12px', borderTop: '1px solid rgba(51,65,85,0.6)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <a href="#" style={navItemStyle} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(30,41,59,0.8)'; e.currentTarget.style.color = 'white'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#cbd5e1'; }}>
-            <span className="material-symbols-outlined" style={{ fontSize: '19px', color: '#475569' }}>settings</span>
-            Settings
-          </a>
           <a href="#" onClick={handleLogout} style={navItemStyle} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(30,41,59,0.8)'; e.currentTarget.style.color = 'white'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#cbd5e1'; }}>
             <span className="material-symbols-outlined" style={{ fontSize: '19px', color: '#475569' }}>logout</span>
             Logout
@@ -223,15 +219,6 @@ function GraphPage() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <div style={{ position: 'relative' }}>
-              <span className="material-symbols-outlined" style={{ position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '15px', pointerEvents: 'none' }}>search</span>
-              <input
-                placeholder="Search nodes..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ paddingLeft: '28px', paddingRight: '10px', paddingTop: '5px', paddingBottom: '5px', borderRadius: '4px', border: '1px solid #E2E8F0', backgroundColor: '#F8F9FA', fontSize: '12px', fontFamily: 'JetBrains Mono, monospace', color: '#111827', outline: 'none', width: '160px' }}
-              />
-            </div>
             <button onClick={() => setShowAll(prev => !prev)}
               style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontFamily: 'JetBrains Mono, monospace', color: '#475569', backgroundColor: 'white', border: '1px solid #E2E8F0', padding: '5px 12px', borderRadius: '4px', cursor: 'pointer' }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#4A8784'; e.currentTarget.style.color = '#4A8784'; }}
@@ -239,7 +226,8 @@ function GraphPage() {
               <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>{showAll ? 'filter_alt' : 'filter_alt_off'}</span>
               {showAll ? 'Source only' : 'Show all files'}
             </button>
-            <button style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontFamily: 'JetBrains Mono, monospace', color: 'white', backgroundColor: '#4A8784', border: 'none', padding: '5px 12px', borderRadius: '4px', cursor: 'pointer' }}
+            <button onClick={() => alert('To save the graph: right-click the graph area and select "Save image as", or use your browser\'s screenshot tool (Cmd+Shift+4 on Mac / Win+Shift+S on Windows).')}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontFamily: 'JetBrains Mono, monospace', color: 'white', backgroundColor: '#4A8784', border: 'none', padding: '5px 12px', borderRadius: '4px', cursor: 'pointer' }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3D6B75'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#4A8784'}>
               <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>download</span>
