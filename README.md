@@ -97,12 +97,6 @@ Open http://localhost:3000
 Evaluated on 20 hard questions against the Flask codebase (1,723 chunks).
 AST chunking reduces chunk count by 61.67% compared to naive chunking.
 
-## Team
-
-- **Sneha** — Project lead, AI engine, frontend
-- **Shaivy** — JWT middleware, auth endpoints
-- **Shreyansh** — Repo endpoints, evaluation
-
 ## Academic Context
 
 This project is developed as a research system complementary to CodeMap (Gao et al., ICPC 2026). CodeMap provides visual business component mapping; Codebase Assistant provides conversational Q&A with RAG-based retrieval.
